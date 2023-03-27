@@ -1,0 +1,79 @@
+SELECT  FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education` LIMIT 1000
+--Pull data of anyone 18 years or over
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Age_of_Subject >= 18
+--Pull Data for anyone who rated the Online experience Poor
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Rating_of_Online_Class_experience = "Poor"
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`;
+--SUM OF TIME SPENT ONLINE CLASS by Age
+SELECT ID,Age_of_Subject,Time_spent_on_Online_Class,SUM(Time_spent_on_Online_Class) OVER (PARTITION BY Age_of_Subject ORDER BY Age_of_Subject DESC) AS TotaltimespentonlinebyStudentAge FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`;
+--SUM OF TIME SPENT ON SOCIAL MEDIA by Age
+SELECT Age_of_Subject, ROUND(SUM(Time_spent_on_social_media),1) AS TotalTimespentonsocialmedia FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+GROUP BY 1
+ORDER BY 1
+--Where age of subject is greater than 30 and preferred social media is Instagram
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Age_of_Subject > 30 AND Prefered_social_media_platform = 'Instagram';
+--Where age is between 18-30 and prefered social media is instagram
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Age_of_Subject BETWEEN 18 AND 30 AND Prefered_social_media_platform = 'Instagram'
+ORDER BY Age_of_Subject asc;
+--Younger students (7-30) rate online exp better
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Age_of_Subject BETWEEN 7 AND 30 AND Rating_of_Online_Class_experience = 'Excellent'
+ORDER BY Age_of_Subject asc;
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Age_of_Subject BETWEEN 7 AND 30 AND Rating_of_Online_Class_experience IN ('Excellent','Good');
+--Older students experience
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Age_of_Subject BETWEEN 31 AND 59 AND Rating_of_Online_Class_experience ='Excellent'
+ORDER BY Age_of_Subject asc;
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Age_of_Subject BETWEEN 31 AND 59 AND Rating_of_Online_Class_experience IN ('Excellent','Good');
+--Time spent on fitness and weight loss
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Time_spent_on_fitness > 1.0 AND Change_in_your_weight = 'Decreased';
+-- Time on fitness and weight gain
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Time_spent_on_fitness > 1.0 AND Change_in_your_weight = 'Increased';
+--Time on fitness and weight RC
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Time_spent_on_fitness > 1.0 AND Change_in_your_weight = 'RC';
+--Ratings and Medium
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Rating_of_Online_Class_experience = "Very poor" AND Medium_for_online_class__1st_Option_='Laptop';
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Rating_of_Online_Class_experience = "Very poor" AND Medium_for_online_class__1st_Option_='Smartphone';
+--Total time spent on study in a day
+SELECT *, Time_spent_on_Online_Class+Time_spent_on_self_study AS Totaltimespentonstudy FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Time_spent_on_Online_Class+Time_spent_on_self_study IS NOT NULL;
+--Avg Time spent online by age of subject
+SELECT Age_of_Subject, ROUND(AVG(Time_spent_on_Online_Class),2) AS Avgtimespentonlineclass FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+GROUP BY Age_of_Subject
+ORDER BY 1 desc;
+--Stress busters and Age
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Age_of_Subject BETWEEN 31 AND 59 AND Stress_busters IN ('Listening to music');
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Age_of_Subject BETWEEN 18 AND 30 AND Stress_busters IN ('Listening to music');
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Age_of_Subject BETWEEN 7 AND 17 AND Stress_busters IN ('Listening to music');
+--Using CASE WHEN
+SELECT *, Change_in_your_weight, CASE
+WHEN Change_in_your_weight = 'Increased'THEN 'Weight Gain'
+WHEN Change_in_your_weight ='Decreased'THEN 'Weight Loss'
+WHEN Change_in_your_weight ='RC'THEN 'Same'
+ELSE 'NA'
+END
+FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`;
+--Stressbusters and Health issues
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Stress_busters = "Listening to music" AND Health_issue_during_lockdown = true;
+SELECT*FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`
+WHERE Stress_busters = "Listening to music" AND Health_issue_during_lockdown = false.
+--Showing Join
+SELECT One.ID,Two.Age_Group,SUM(Time_spent_on_Online_Class) OVER (PARTITION BY Age_Group) AS TotaltimespentonlinebyStudentAgeGrp FROM `data-analytics-sql-378420.Final_Project.Covid19_and _Education`One
+left join `data-analytics-sql-378420.Final_Project.Covid19 and Education_AgeGroup` Two
+on One.ID=Two.ID
+
